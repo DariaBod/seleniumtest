@@ -26,8 +26,7 @@ jobs:
 
     # 3. Build and run TestNG tests with AspectJ javaagent
     - name: Run tests with TestNG
-      run: |
-        MAVEN_OPTS="-javaagent:${HOME}/.m2/repository/org/aspectj/aspectjweaver/1.9.20.1/aspectjweaver-1.9.20.1.jar" mvn clean test -B -Dsurefire.suiteXmlFiles=src/test/resources/testng.xml
+      run: mvn clean test -B -Dsurefire.suiteXmlFiles=src/test/resources/testng.xml
 
     # 4. Generate Allure report
     - name: Generate Allure report
