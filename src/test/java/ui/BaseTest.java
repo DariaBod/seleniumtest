@@ -18,6 +18,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
+import java.util.UUID;
+
 public class BaseTest {
 
     protected static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
@@ -42,6 +44,11 @@ public class BaseTest {
                 WebDriverManager.chromedriver().setup();
                 ChromeOptions chromeOptions = new ChromeOptions();
                 if (headless) chromeOptions.addArguments("--headless=new");
+                chromeOptions.addArguments("--no-sandbox");
+                chromeOptions.addArguments("--disable-dev-shm-usage");
+                chromeOptions.addArguments("--remote-allow-origins=*");
+                chromeOptions.addArguments("--disable-gpu");
+                chromeOptions.addArguments("--user-data-dir=/tmp/chrome-" + UUID.randomUUID());
                 return new ChromeDriver(chromeOptions);
 
             case "firefox":
