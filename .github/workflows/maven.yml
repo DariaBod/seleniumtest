@@ -1,0 +1,41 @@
+name: Java CI with Maven and TestNG + Allure
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Checkout
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # 2. Set up JDK
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+
+    # 3. Build and run TestNG tests with AspectJ javaagent
+    - name: Run tests with TestNG
+      run: |
+        MAVEN_OPTS="-javaagent:${HOME}/.m2/repository/org/aspectj/aspectjweaver/1.9.20.1/aspectjweaver-1.9.20.1.jar" mvn clean test -B -Dsurefire.suiteXmlFiles=testng.xml
+
+    # 4. Generate Allure report
+    - name: Generate Allure report
+      run: mvn allure:report
+
+    # 5. Upload Allure report as artifact
+    - name: Upload Allure report
+      uses: actions/upload-artifact@v3
+      with:
+        name: allure-report
+        path: target/site/allure-maven-plugin
