@@ -42,7 +42,14 @@ public class BaseTest {
         switch (browser.toLowerCase()) {
             case "chrome":
                 WebDriverManager.chromedriver().setup();
-                ChromeOptions chromeOptions = getChromeOptions(headless);
+                ChromeOptions chromeOptions = new ChromeOptions();
+                if (headless) chromeOptions.addArguments("--headless=new");
+                chromeOptions.addArguments("--no-sandbox");
+                chromeOptions.addArguments("--disable-dev-shm-usage");
+                chromeOptions.addArguments("--disable-blink-features=AutomationControlled");
+                chromeOptions.addArguments("--disable-infobars");
+                chromeOptions.addArguments("--remote-allow-origins=*");
+                chromeOptions.addArguments("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0 Safari/537.36");
                 return new ChromeDriver(chromeOptions);
 
             case "firefox":
@@ -54,18 +61,6 @@ public class BaseTest {
             default:
                 throw new IllegalArgumentException("Unsupported browser: " + browser);
         }
-    }
-
-    private static ChromeOptions getChromeOptions(boolean headless) {
-        ChromeOptions chromeOptions = new ChromeOptions();
-        if (headless) chromeOptions.addArguments("--headless=new");
-        chromeOptions.addArguments("--no-sandbox");
-        chromeOptions.addArguments("--disable-dev-shm-usage");
-        chromeOptions.addArguments("--disable-blink-features=AutomationControlled");
-        chromeOptions.addArguments("--disable-infobars");
-        chromeOptions.addArguments("--remote-allow-origins=*");
-        chromeOptions.addArguments("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0 Safari/537.36");
-        return chromeOptions;
     }
 
     private void performApiLogin() {
